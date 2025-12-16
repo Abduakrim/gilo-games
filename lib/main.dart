@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gilo_games/schulte_table.dart';
+import 'package:gilo_games/pages/home_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,6 +10,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: SchulteTable());
+    return const MaterialApp(home: HomePage());
   }
 }

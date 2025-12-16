@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
 class SchulteTable extends StatefulWidget {
   const SchulteTable({super.key});
-
   @override
   State<SchulteTable> createState() => _SchulteTableState();
 }
@@ -14,7 +14,7 @@ class _SchulteTableState extends State<SchulteTable> {
   int nextNumber = 1;
   Timer? timer;
   DateTime? startTime;
-
+  double sigma = 10;
   int dimension = 3;
   List<int> generateNumbers(int dimension) {
     int total = dimension * dimension;
@@ -28,6 +28,8 @@ class _SchulteTableState extends State<SchulteTable> {
     timer ??= Timer.periodic(Duration(milliseconds: 50), (_) {
       setState(() {});
     });
+    sigma = 0;
+    setState(() {});
   }
 
   void resetGame() {
@@ -41,6 +43,7 @@ class _SchulteTableState extends State<SchulteTable> {
   void stopTimer() {
     timer?.cancel();
     timer = null;
+    sigma = 10;
   }
 
   int get totalCells => dimension * dimension;
@@ -75,7 +78,19 @@ class _SchulteTableState extends State<SchulteTable> {
           SizedBox(
             width: 150,
             child: PopupMenuButton(
-              child: Text(dimension.toString()),
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+
+                child: Text(
+                  dimension.toString(),
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
               onSelected: (value) {
                 dimension = value;
                 resetGame();
@@ -102,42 +117,59 @@ class _SchulteTableState extends State<SchulteTable> {
       body: Center(
         child: Padding(
           padding: EdgeInsets.only(top: 30),
-          child: SizedBox(
-            width: 500,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
+                child: SizedBox(
+                  width: 500,
 
-            child: GridView.builder(
-              itemCount: totalCells,
-              itemBuilder: (context, index) {
-                final number = nums![index];
-                return GestureDetector(
-                  onTap: () {
-                    if (number == nextNumber) {
-                      if (nextNumber == 1) startTimer();
-
-                      setState(() {
-                        nextNumber++;
-                      });
-                    }
-                    if (nextNumber > totalCells) {
-                      stopTimer();
-                    }
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: Colors.black),
-                    ),
-                    child: Text(
-                      nums![index].toString(),
-                      style: TextStyle(fontSize: 40),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: totalCells,
+                    itemBuilder: (context, index) {
+                      final number = nums![index];
+                      return GestureDetector(
+                        onTap: () {
+                          if (number == nextNumber) {
+                            setState(() {
+                              nextNumber++;
+                            });
+                          }
+                          if (nextNumber > totalCells) {
+                            stopTimer();
+                          }
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 2, color: Colors.black),
+                          ),
+                          child: Text(
+                            nums![index].toString(),
+                            style: TextStyle(fontSize: 40),
+                          ),
+                        ),
+                      );
+                    },
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: dimension,
                     ),
                   ),
-                );
-              },
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: dimension,
+                ),
               ),
-            ),
+              if (timer?.isActive ?? false)
+                SizedBox()
+              else
+                ElevatedButton(
+                  onPressed: () {
+                    resetGame();
+                    startTimer();
+                  },
+                  child: Text('Start'),
+                ),
+            ],
           ),
         ),
       ),
