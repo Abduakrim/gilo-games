@@ -33,8 +33,7 @@ class _ReactionTimeState extends State<ReactionTime> {
       waitTimer?.cancel();
       state = ReactionState.tooSoon;
     } else if (state == ReactionState.ready) {
-      reactionMs =
-          DateTime.now().difference(greenTime!).inMilliseconds;
+      reactionMs = DateTime.now().difference(greenTime!).inMilliseconds;
       state = ReactionState.finished;
     } else {
       startGame();
@@ -72,7 +71,7 @@ class _ReactionTimeState extends State<ReactionTime> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: backgroundColor,),
+      appBar: AppBar(backgroundColor: backgroundColor),
       body: GestureDetector(
         onTap: handleTap,
         child: Container(

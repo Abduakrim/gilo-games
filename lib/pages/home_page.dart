@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gilo_games/games/aim_trainer.dart';
 import 'package:gilo_games/games/reaction_time.dart';
 import 'package:gilo_games/games/schulte_table.dart';
 import 'package:gilo_games/models/game_model.dart';
@@ -20,6 +21,12 @@ class HomePage extends StatelessWidget {
         subtitle: 'Tap when green appears',
         icon: Icons.flash_on,
         page: const ReactionTime(),
+      ),
+      GameItem(
+        title: 'Aim Trainer',
+        subtitle: 'Tap when item appears',
+        icon: Icons.flash_on,
+        page: const AimTrainer(),
       ),
     ];
 
